@@ -1,0 +1,140 @@
+#root {
+  max-width: 1280px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* NAVBAR- START */
+
+.navbar{
+  background-color: #f1f1f1;
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.navbar>ul {
+  list-style-type: none;
+  display: flex;
+  gap:10px
+}
+
+.navbar>ul>li>a {
+  text-decoration: none;
+  color: #333 !important;
+  padding: 8px 20px !important;
+  border-radius: 20px;
+}
+
+.navbar>ul>li>a:hover {
+  background-color: #ddd;
+}
+
+.active {
+  background-color: #ccc;
+}
+
+.navbar>button {
+  background-color: #f1f1f1;
+  border: none;
+  padding: 3px 9px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+.navbar>button:hover {
+  background-color: #ddd;
+}
+
+/* NAVBAR - END  */
+
+.full-width{
+  width: 98vw;
+}
+
+.source-defintion-table-container__headline{
+  margin: 30px 0px 50px 0px;
+  padding-left: 40px;
+}
+
+.center-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.unordered-list{
+  display: flex;
+  gap: 10px;
+}
+
+.unordered-list>li{
+  list-style: none;
+}
+
+.source-form,
+.workspace-form {
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+  margin: 0 auto;
+}
+
+.marginTop{
+  margin-top: 20px;
+}
+
+.source-form label {
+  margin-bottom: 0.5rem;
+}
+
+.source-form input,
+.workspace-form input {
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.source-form button, 
+.workspace-form button,
+.save-workspace-btn {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  border-radius: 3px;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.general-form {
+  display: flex;
+  width: fit-content;
+  flex-direction: column;
+}
+
+.general-input {
+  height: 40px;
+  padding: 8px;
+  width: 350px;
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.validation-error {
+  color: red;
+}
+
+.general-button {
+  background-color: #03C6C7;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  padding: 6px 9px;
+  cursor: pointer;
+}
+.general-button__big {
+  height: 48px;
+  font-size: 20px;
+}
