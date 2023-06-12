@@ -1,7 +1,6 @@
-
 ## Run Locally
 
-### Note 
+### Note
 
 - start remote server before running project locally
 
@@ -26,3 +25,25 @@ run app in development
 ```
 
 Go to browser and redirect to http://localhost:5173/
+
+## Screenshots
+
+### List of sources that workspace have
+
+![App Screenshot](./screenshots/home.jpg)
+
+### Create workspace
+
+![App Screenshot](./screenshots/createWorkspace.jpg)
+
+### Update workspace
+
+![App Screenshot](./screenshots/updateWorkspace.jpg)
+
+### Create Source
+
+![App Screenshot](./screenshots/createSource.jpg)
+
+### List of source definitions
+
+![App Screenshot](./screenshots/allSourceDefinitions.jpg)
