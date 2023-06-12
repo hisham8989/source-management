@@ -16,36 +16,78 @@ const CreateSource = () => {
 
   useEffect(() => {
     const fetchSpecs = async (wsi, sdi) => {
-      const specs =
-        await sourceDefinitionManager.getSourceDefinitionSpecificationsById(
-          wsi,
-          sdi
-        );
-      setFieldsProperties(specs.connectionSpecification.properties);
-      const requredValues = specs.connectionSpecification.required;
-      setRequiredFields(requredValues);
-      const yupSchema = Yup.object().shape({
-        ...createValidationSchema(
-          requredValues,
-          specs.connectionSpecification.properties
-        ),
-      });
-      const currentInnitialValues = {};
-      requredValues.forEach((field) => {
-        currentInnitialValues[field] = "";
-      });
+      try {
+        const specs =
+          await sourceDefinitionManager.getSourceDefinitionSpecificationsById(
+            wsi,
+            sdi
+          );
 
-      setInitialValues(currentInnitialValues);
-      setValidationSchema(yupSchema);
+        const currentFieldsProperties =
+          specs.connectionSpecification.properties;
+
+        setFieldsProperties(currentFieldsProperties);
+        const requredValues = specs.connectionSpecification.required;
+        setRequiredFields(requredValues);
+        const yupSchema = Yup.object().shape({
+          ...createValidationSchema(requredValues, currentFieldsProperties),
+        });
+        const currentInnitialValues = {};
+        requredValues.forEach((field) => {
+          if (currentFieldsProperties[field].type === "array") {
+            currentInnitialValues[field] = [""];
+          } else if (currentFieldsProperties[field].type === "string") {
+            currentInnitialValues[field] = "";
+          }
+        });
+
+        setInitialValues(currentInnitialValues);
+        setValidationSchema(yupSchema);
+      } catch (err) {
+        alert("failed to fetch source defintion");
+        navigate("/source-definitions");
+      }
     };
 
     fetchSpecs(workSpaceId, sourceDefinitionId);
-  }, [workSpaceId, sourceDefinitionId]);
+  }, [workSpaceId, sourceDefinitionId, navigate]);
 
   const createValidationSchema = (fields, fieldsProperties) => {
     const schema = {};
     fields.forEach((field) => {
-      schema[field] = Yup.string().required(`${field} is required`);
+      if (fieldsProperties[field].pattern) {
+        schema[field] = Yup.string()
+          .matches(fieldsProperties[field].pattern, "should match the pattern")
+          .required(`${fieldsProperties[field]?.title ?? field} is required`);
+      } else if (
+        fieldsProperties[field].type === "string" &&
+        fieldsProperties[field]?.enum
+      ) {
+        const enumValues = [...fieldsProperties[field].enum];
+        schema[field] = Yup.string()
+          .oneOf(
+            enumValues,
+            `Invalid value. Valid values are: ${enumValues.join(", ")}`
+          )
+          .required(`${fieldsProperties[field]?.title ?? field} is required`);
+      } else if (fieldsProperties[field].type === "string") {
+        schema[field] = Yup.string().required(
+          `${fieldsProperties[field]?.title ?? field} is required`
+        );
+      } else if (fieldsProperties[field]?.type === "array") {
+        schema[field] = Yup.array()
+          .min(
+            1,
+            `at least one ${
+              fieldsProperties[field]?.title ?? field
+            } is required`
+          )
+          .of(
+            Yup.string().required(
+              `${fieldsProperties[field]?.title ?? field} is required`
+            )
+          );
+      }
     });
 
     return schema;
@@ -56,12 +98,6 @@ const CreateSource = () => {
   }
 
   const handleSubmit = (values) => {
-    for (let key in values) {
-      if (key.includes("date")) {
-        values[key] += "T00:00:00Z";
-      }
-    }
-
     const requestBody = {
       workspaceId: workSpaceId,
       sourceDefinitionId: sourceDefinitionId,
